@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class Manager extends Model
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
+    protected $guarded = ['id'];
 
     public function branch(){
         return $this->belongsTo(Branch::class);

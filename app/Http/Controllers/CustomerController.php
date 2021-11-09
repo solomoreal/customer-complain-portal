@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController;
+use App\Models\Branch;
+use Image;
 
 class CustomerController extends Controller
 {
@@ -14,7 +17,13 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customers = Customer::all();
+        if($request->ajax()){
+            $success['customers'] = $customers;
+            return $this->sendResponse($success, 'Managers retrieved');
+        }
+
+        return view('customer.index',compact('customers'));
     }
 
     /**
@@ -24,7 +33,8 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        $branches = Branch::all();
+        return view('customer.create',compact('branches'));
     }
 
     /**
@@ -35,7 +45,46 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'branch_id' => 'required|integer',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'password' => 'required|confirmed',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'photo' => 'required|image',
+        ]);
+       if($request->hasFile('photo')){
+        $original = $request->file('photo');
+        $image = Image::make($original)->resize(100, 100);
+        $photo_url = time().'.'.$original->extension();
+        //upload image
+        $path = $image->storeAs('public', $photo_url);
+
+       }
+
+       $customer = Customer::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'password' => bcrypt($request->password),
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'branch_id' => $request->branch_id,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'photo' => $photo,
+        ]);
+
+        if($request->ajax()){
+
+            return $this->sendResponse($success, 'Customer Successfuly Created');
+        }
+
+        return back();
     }
 
     /**

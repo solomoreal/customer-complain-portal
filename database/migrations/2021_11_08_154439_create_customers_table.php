@@ -15,14 +15,17 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('email')->unique();
+            $table->softDeletes();
+            $table->string('password');
             $table->string('phone');
             $table->text('address');
             $table->string('city');
             $table->string('state');
             $table->foreignId('branch_id');
+            $table->string('photo')->default('noimage.jpg');
             $table->timestamps();
         });
     }

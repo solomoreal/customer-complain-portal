@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController;
 
-class BranchController extends Controller
+class BranchController extends BaseController
 {
     /**
      * Display a listing of the resource.

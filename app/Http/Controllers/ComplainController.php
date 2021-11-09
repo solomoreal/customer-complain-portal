@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Complain;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController;
 
-class ComplainController extends Controller
+class ComplainController extends BaseController
 {
     /**
      * Display a listing of the resource.

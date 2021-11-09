@@ -18,7 +18,7 @@ class CreateComplainsTable extends Migration
             $table->string('title');
             $table->longText('message');
             $table->boolean('reviewed')->nullable()->default(false);
-            $table->foreignId('user_id');
+            $table->foreignId('customer_id');
             $table->foreignId('branch_id');
             $table->timestamps();
         });

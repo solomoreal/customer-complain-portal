@@ -15,12 +15,13 @@ class CreateManagersTable extends Migration
     {
         Schema::create('managers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('email')->unique();
+            $table->softDeletes();
+            $table->string('password');
             $table->string('phone')->nullable();
             $table->foreignId('branch_id');
-            $table->string('password');
             $table->timestamps();
         });
 

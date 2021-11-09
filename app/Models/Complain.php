@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Complain extends Model
 {
     use HasFactory;
+
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function customer(){
+        return $this->belongsTo(Customer::class);
+    }
 }
