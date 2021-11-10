@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Manager;
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateManagerRequest;
+use App\Http\Requests\StoreManagerRequest;
 use App\Http\Controllers\BaseController;
 class ManagerController extends BaseController
 {
@@ -31,17 +33,8 @@ class ManagerController extends BaseController
         return view('managers.create',compact('branches'));
     }
 
-    public function store(Request $request)
+    public function store(StoreManagerRequest $request)
     {
-        $request->validate([
-            'branch_id' => 'required|integer',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'password' => 'required|confirmed',
-            'email' => 'required|email',
-            'phone' => 'required',
-        ]);
-
        $manager = Manager::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -75,17 +68,8 @@ class ManagerController extends BaseController
         //return view('managers.edit',compact('branches','manager'));
     }
 
-    public function update(Request $request, Manager $manager)
+    public function update(UpdateManagerRequest $request, Manager $manager)
     {
-        $request->validate([
-            'branch_id' => 'required|integer',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'password' => 'required|confirmed',
-            'email' => 'required|email',
-            'phone' => 'required',
-        ]);
-
        $manager->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,

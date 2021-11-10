@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Complain;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateComplaintRequest;
+use App\Http\Requests\StoreComplaintRequest;
 use App\Http\Controllers\BaseController;
 use App\Models\Branch;
 
@@ -32,14 +34,8 @@ class ComplainController extends BaseController
         //return view('compliants.create',compact('branches'));
     }
 
-    public function store(Request $request)
+    public function store(StoreComplaintRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string',
-            'message' => 'required',
-            'branch_id' => 'required|integer',
-        ]);
-
         $complaint = Complain::create([
             'title' => $request->title,
             'message' => $request->message,
@@ -57,7 +53,7 @@ class ComplainController extends BaseController
         }
     }
 
-    public function show(Complain $complain,Request $request)
+    public function show(Complain $complain, Request $request)
     {
         if($request->ajax()){
             $data['complaint'] = $complain;
@@ -81,14 +77,9 @@ class ComplainController extends BaseController
     }
 
 
-    public function update(Request $request, Complain $complain)
+    public function update(UpdateComplaintRequest $request, Complain $complain)
     {
-        $request->validate([
-            'title' => 'required|string',
-            'message' => 'required',
-            'branch_id' => 'required|integer',
-        ]);
-
+        
         $complain->update([
             'title' => $request->title,
             'message' => $request->message,

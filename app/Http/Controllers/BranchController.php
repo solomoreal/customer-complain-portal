@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreBranchRequest;
+use App\Http\Requests\UpdateBranchRequest;
 use App\Http\Controllers\BaseController;
 
 class BranchController extends BaseController
@@ -28,16 +30,7 @@ class BranchController extends BaseController
     }
 
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'branch_name' => 'required|string',
-            'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
-        ]);
+    public function store(StoreBranchRequest $request){
 
         $branch = Branch::create([
             'branch_name' => $request->branch_name,
@@ -77,17 +70,8 @@ class BranchController extends BaseController
         //return view('branches.edit',compact('branch'));
     }
 
-    public function update(Request $request, Branch $branch)
+    public function update(UpdateBranchRequest $request, Branch $branch)
     {
-        $request->validate([
-            'branch_name' => 'required|string',
-            'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
-        ]);
-
         $branch->update([
             'branch_name' => $request->branch_name,
             'address' => $request->address,

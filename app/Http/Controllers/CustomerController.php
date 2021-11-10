@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Controllers\BaseController;
 use App\Models\Branch;
 use App\Notifications\CustomerCreated;
@@ -36,22 +38,8 @@ class CustomerController extends Controller
         //return view('customers.create',compact('branches'));
     }
 
-    public function store(Request $request)
+    public function store(StoreCustomerRequest $request)
     {
-        $request->validate([
-            'branch_id' => 'required|integer',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'password' => 'required|confirmed',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'photo' => 'required|image',
-        ]);
-
-
        $customer = Customer::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -97,19 +85,8 @@ class CustomerController extends Controller
         //return view('customers.edit',compact('branches','customer'));
     }
 
-    public function update(Request $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $request->validate([
-            'branch_id' => 'required|integer',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-        ]);
-
 
        $customer->update([
             'first_name' => $request->first_name,
