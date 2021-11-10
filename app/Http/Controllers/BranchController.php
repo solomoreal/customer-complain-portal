@@ -8,79 +8,113 @@ use App\Http\Controllers\BaseController;
 
 class BranchController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $branches = Branch::paginate(10);
+
+        if(Request::ajax()){
+            $data['branches'] = Branch::all();
+             return $this->sendResponse($data,'all branches');
+        }
+
+        return view('branches.index',compact('branches'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        //
+        //return view('branches.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'branch_name' => 'required|string',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+        ]);
+
+        $branch = Branch::create([
+            'branch_name' => $request->branch_name,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'phone' => $request->phone,
+            'email' => $request->email,
+        ]);
+
+        if(Request::ajax()){
+            $data['branch'] = $branch;
+            return $this->sendResponse($data,'Branch successfully created');
+        }
+
+        //return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Branch  $branch
-     * @return \Illuminate\Http\Response
-     */
     public function show(Branch $branch)
     {
-        //
+       if(Request::ajax()){
+        $data['branch'] = $branch;
+        return $this->sendResponse($data,'show Branch');
+       }
+
+       //return view('branches.show',compact('branch'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Branch  $branch
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Branch $branch)
     {
-        //
+        if(Request::ajax()){
+            $data['branch'] = $branch;
+            return $this->sendResponse($data,'edit Branch');
+           }
+
+        //return view('branches.edit',compact('branch'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Branch  $branch
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Branch $branch)
     {
-        //
+        $request->validate([
+            'branch_name' => 'required|string',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+        ]);
+
+        $branch->update([
+            'branch_name' => $request->branch_name,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'phone' => $request->phone,
+            'email' => $request->email,
+        ]);
+
+        if(Request::ajax()){
+            $data['branch'] = $branch;
+            return $this->sendResponse($data,'Branch successfully updated');
+        }
+
+        //return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Branch  $branch
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Branch $branch)
     {
-        //
+        $branch->delete();
+        if(Request::ajax()){
+            $data['branch'] = $branch;
+            return $this->sendResponse($data,'Branch successfully deleted');
+        }
+
+        //return back();
+
     }
 }

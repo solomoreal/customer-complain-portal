@@ -80,10 +80,10 @@ class ManagerController extends BaseController
     {
         if(Request::ajax()){
             $success['manager'] = $manager;
-            return $this->sendResponse($success, 'Manager Successfuly Created');
+            return $this->sendResponse($success, 'Manager');
         }
 
-        return view('manager.show');
+        //return view('manager.show',compact('manager'));
     }
 
     /**
@@ -95,7 +95,7 @@ class ManagerController extends BaseController
     public function edit(Manager $manager)
     {
         $branches = Branch::all();
-        return view('manager.edit',compact('branches','manager'));
+        //return view('manager.edit',compact('branches','manager'));
     }
 
     /**
@@ -116,10 +116,9 @@ class ManagerController extends BaseController
             'phone' => 'required',
         ]);
 
-       $manager = Manager::create([
+       $manager->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'password' => bcript($request->password),
             'email' => $request->email,
             'phone' => $request->phone,
             'branch_id' => $request->branch_id,
@@ -130,7 +129,7 @@ class ManagerController extends BaseController
             return $this->sendResponse($success, 'Manager Successfuly updated');
         }
 
-        return back();
+        //return back();
     }
 
     /**
@@ -147,7 +146,7 @@ class ManagerController extends BaseController
             return $this->sendResponse($success, 'Manager Successfuly deleted');
         }
 
-        return back();
+        //return back();
 
     }
 }

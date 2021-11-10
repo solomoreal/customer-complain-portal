@@ -15,7 +15,13 @@ class ComplainController extends BaseController
      */
     public function index()
     {
-        //
+        $complaints = Complain::paginate(10);
+        if(Request::ajax()){
+            $data['compliants'] = Complain::all();
+             return $this->sendResponse($data,'all compliants');
+        }
+
+        return view('compliants.index',compact('complaints'));
     }
 
     /**

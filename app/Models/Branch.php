@@ -9,6 +9,8 @@ class Branch extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function customers(){
         return $this->hasMany(Customer::class);
     }

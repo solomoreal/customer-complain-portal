@@ -6,20 +6,21 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Complain;
 
-class CustomerCreated extends Notification
+class WeeklySummaryNotification extends Notification
 {
     use Queueable;
-    public $customer;
+    public $manager;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($customer)
+    public function __construct($manager)
     {
-        $this->customer = $customer;
+        $this->manager = $manager;
     }
 
     /**
@@ -41,14 +42,18 @@ class CustomerCreated extends Notification
      */
     public function toMail($notifiable)
     {
-        $customer = $this->customer;
+        $manager = $this->manager;
+        $complains = Complain::where('branch_id',$manager->branch_id)->whereDate('created_at','<', now()->subDays(7))->get();
+        $total_complains = count($complains);
+        $total_reviewed = count($complains->where('reviewed', 1));
+        $pending_review = count($complains->where('reviewed', 0));
         return (new MailMessage)
-                    ->greeting("Hello $customer->name")
-                    ->line("Your Account Was Created Successfully, Here Are Your login credentials...")
-                    ->line("E-mail: $customer->email")
-                    ->line("password: password")
-                    ->line("please change your password to a more secured one")
-                    ->action('Visit Our Site Here', url('/'))
+                    ->greeting("Hello $manager->fullName()")
+                    ->line("Your Branch Received a Total of $total_complain This Week")
+                    ->line("breakdown: ")
+                    ->line("Total Reviewed: $total_reviewed")
+                    ->line("Pending: $pending_review")
+                    ->action('Click here to logon', url('/'))
                     ->line('Thank you!');
     }
 
