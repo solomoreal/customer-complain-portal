@@ -16,13 +16,10 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role == 1) {
+        if (auth()->user()->tokenCan('role:admin')) {
             return $next($request);
         }
 
-        if (! $request->expectsJson()) {
-            return route('login');
-        }
         return response()->json('Not Authorized', 401);
     }
 }

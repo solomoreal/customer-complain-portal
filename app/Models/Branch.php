@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+//use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Branch extends Model
 {
@@ -15,7 +17,15 @@ class Branch extends Model
         return $this->hasMany(Customer::class);
     }
 
-    public function managers(){
-        return $this->hasMany(Manager::class);
+    public function manager(){
+        return $this->hasOne(Manager::class);
+    }
+
+    public function complaints(){
+        return $this->hasMany(Complain::class);
+    }
+
+    public function fullAddress(){
+        return $this->address.' '.$this->city.' '.$this->state;
     }
 }

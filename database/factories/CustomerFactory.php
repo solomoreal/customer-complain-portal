@@ -16,8 +16,8 @@ class CustomerFactory extends Factory
     {
 
         return [
-            'first_name' => $this->faker->name,
-            'last_name' => $this->faker->name,
+            'first_name' => $this->faker->FirstName,
+            'last_name' => $this->faker->firstName,
             'email' => $this->faker->unique()->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'phone' => $this->faker->phoneNumber,
@@ -25,6 +25,8 @@ class CustomerFactory extends Factory
             'city' => $this->faker->city,
             'state' => $this->faker->state,
             'branch_id' => rand(1, 3),
+            'photo' => 'https://picsum.photos/100
+            '
         ];
     }
 }

@@ -5,18 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Complain;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
+use App\Models\Branch;
 
 class ComplainController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
         $complaints = Complain::paginate(10);
-        if(Request::ajax()){
+        if($request->ajax()){
             $data['compliants'] = Complain::all();
              return $this->sendResponse($data,'all compliants');
         }
@@ -24,69 +21,100 @@ class ComplainController extends BaseController
         return view('compliants.index',compact('complaints'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $branches = Branch::all();
+        if($request->ajax()){
+            $data['branches'] = $branches;
+             return $this->sendResponse($data,'all branches');
+        }
+
+        //return view('compliants.create',compact('branches'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string',
+            'message' => 'required',
+            'branch_id' => 'required|integer',
+        ]);
+
+        $complaint = Complain::create([
+            'title' => $request->title,
+            'message' => $request->message,
+            'branch_id' => $request->branch_id,
+            'customer_id' => auth()->user()->id,
+        ]);
+
+        if($complaint){
+            if($request->ajax()){
+                $data['compliant'] = $complaint;
+                 return $this->sendResponse($data,'complaint successfully submitted, we will get back to you as soon as possible');
+            }
+
+            //return back()->with('success','complaint successfully submitted, we will get back to you as soon as possible');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Complain  $complain
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Complain $complain)
+    public function show(Complain $complain,Request $request)
     {
-        //
+        if($request->ajax()){
+            $data['complaint'] = $complain;
+            return $this->sendResponse($data,'show Branch');
+           }
+
+           //return view('complaints.show',compact('complain'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Complain  $complain
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Complain $complain)
+
+    public function edit(Complain $complain, Request $request)
     {
-        //
+        $branches = Branch::all();
+        if($request->ajax()){
+            $data['branches'] = $branches;
+            $data['complaint'] = $complain;
+            return $this->sendResponse($data,'update data');
+        }
+
+        //return view('compliants.edit',compact('branches','complain'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Complain  $complain
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Complain $complain)
     {
-        //
+        $request->validate([
+            'title' => 'required|string',
+            'message' => 'required',
+            'branch_id' => 'required|integer',
+        ]);
+
+        $complain->update([
+            'title' => $request->title,
+            'message' => $request->message,
+            'branch_id' => $request->branch_id,
+            'customer_id' => auth()->user()->id,
+        ]);
+
+        if($complain){
+            if($request->ajax()){
+                $data['compliant'] = $complain;
+                 return $this->sendResponse($data,'complaint successfully submitted, we will get back to you as soon as possible');
+            }
+
+            //return back()->with('success','complaint successfully submitted, we will get back to you as soon as possible');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Complain  $complain
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Complain $complain)
+
+    public function destroy(Complain $complain, Request $request)
     {
-        //
+        $complain->delete();
+        if($request->ajax()){
+            $data['complain'] = $complain;
+            return $this->sendResponse($data,'complain successfully deleted');
+        }
+
+        //return back();
     }
 }

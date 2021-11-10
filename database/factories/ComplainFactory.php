@@ -15,7 +15,7 @@ class ComplainFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title,
+            'title' => $this->faker->text(8),
             'message' => $this->faker->text(80),
             'reviewed' => rand(0, 1),
             'customer_id' => rand(1, 26),

@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
           integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
           crossorigin="anonymous"/>
+          <link href="{{asset('assets\plugins\datatable\dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
 
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
 
     @yield('third_party_stylesheets')
 
@@ -74,13 +76,23 @@
     <!-- Main Footer -->
     <footer class="main-footer">
         <div class="float-right d-none d-sm-block">
-            
+
         </div>
 
     </footer>
 </div>
 
+
 <script src="{{ mix('js/app.js') }}" defer></script>
+
+        <script src="{{asset('assets\js\vendors\jquery-3.2.1.min.js')}}"></script>
+        <script src="{{asset('assets\plugins\datatable\jquery.dataTables.min.js')}}"></script>
+		<script src="{{asset('assets\plugins\datatable\dataTables.bootstrap4.min.js')}}"></script>
+		<script type="text/javascript">
+		$(function(){
+			$('#example').DataTable();
+			  });
+		</script>
 
 @yield('third_party_scripts')
 

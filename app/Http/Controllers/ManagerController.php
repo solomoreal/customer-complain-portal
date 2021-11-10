@@ -13,35 +13,24 @@ class ManagerController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $managers = Manager::all();
+        $managers = Manager::paginate(10);
 
         if($request->ajax()){
             $success['managers'] = $manager;
             return $this->sendResponse($success, 'Managers retrieved');
         }
 
-        return view('manager.index',compact('managers'));
+        return view('managers.index',compact('managers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $branches = Branch::all();
-        return view('manager.register',compact('branches'));
+        return view('managers.create',compact('branches'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -67,44 +56,25 @@ class ManagerController extends BaseController
             return $this->sendResponse($success, 'Manager Successfuly Created');
         }
 
-        return view('manager.login');
+        return view('managers.login');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Manager  $manager
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Manager $manager)
+    public function show(Manager $manager, Request $request)
     {
-        if(Request::ajax()){
+        if($request->ajax()){
             $success['manager'] = $manager;
             return $this->sendResponse($success, 'Manager');
         }
 
-        //return view('manager.show',compact('manager'));
+        //return view('managers.show',compact('manager'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Manager  $manager
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Manager $manager)
     {
         $branches = Branch::all();
-        //return view('manager.edit',compact('branches','manager'));
+        //return view('managers.edit',compact('branches','manager'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Manager  $manager
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Manager $manager)
     {
         $request->validate([
@@ -132,13 +102,7 @@ class ManagerController extends BaseController
         //return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Manager  $manager
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Manager $manager)
+    public function destroy(Manager $manager, Request $request)
     {
         $manager->delete();
         if($request->ajax()){

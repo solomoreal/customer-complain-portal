@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Complain extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
 
     public function branch(){
         return $this->belongsTo(Branch::class);

@@ -42,8 +42,20 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'session',
             'provider' => 'users',
+            'hash' => false,
+        ],
+
+        'managers' => [
+            'driver' => 'session',
+            'provider' => 'manager',
+            'hash' => false,
+        ],
+
+        'customers' => [
+            'driver' => 'session',
+            'provider' => 'customers',
             'hash' => false,
         ],
     ],
@@ -70,6 +82,17 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+
+        'managers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Manager::class,
+        ],
+
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Customer::class,
+        ],
+
 
         // 'users' => [
         //     'driver' => 'database',
@@ -99,6 +122,21 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+        'customers' => [
+            'provider' => 'customers',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'managers' => [
+            'provider' => 'managers',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
     ],
 
     /*

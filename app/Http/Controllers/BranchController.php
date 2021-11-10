@@ -9,11 +9,11 @@ use App\Http\Controllers\BaseController;
 class BranchController extends BaseController
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $branches = Branch::paginate(10);
 
-        if(Request::ajax()){
+        if($request->ajax()){
             $data['branches'] = Branch::all();
              return $this->sendResponse($data,'all branches');
         }
@@ -48,7 +48,7 @@ class BranchController extends BaseController
             'email' => $request->email,
         ]);
 
-        if(Request::ajax()){
+        if($request->ajax()){
             $data['branch'] = $branch;
             return $this->sendResponse($data,'Branch successfully created');
         }
@@ -56,9 +56,9 @@ class BranchController extends BaseController
         //return back();
     }
 
-    public function show(Branch $branch)
+    public function show(Branch $branch, Request $request)
     {
-       if(Request::ajax()){
+       if($request->ajax()){
         $data['branch'] = $branch;
         return $this->sendResponse($data,'show Branch');
        }
@@ -67,9 +67,9 @@ class BranchController extends BaseController
     }
 
 
-    public function edit(Branch $branch)
+    public function edit(Branch $branch, Request $request)
     {
-        if(Request::ajax()){
+        if($request->ajax()){
             $data['branch'] = $branch;
             return $this->sendResponse($data,'edit Branch');
            }
@@ -97,7 +97,7 @@ class BranchController extends BaseController
             'email' => $request->email,
         ]);
 
-        if(Request::ajax()){
+        if($request->ajax()){
             $data['branch'] = $branch;
             return $this->sendResponse($data,'Branch successfully updated');
         }
@@ -106,10 +106,10 @@ class BranchController extends BaseController
     }
 
 
-    public function destroy(Branch $branch)
+    public function destroy(Branch $branch, Request $request)
     {
         $branch->delete();
-        if(Request::ajax()){
+        if($request->ajax()){
             $data['branch'] = $branch;
             return $this->sendResponse($data,'Branch successfully deleted');
         }

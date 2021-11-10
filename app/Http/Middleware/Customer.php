@@ -16,13 +16,10 @@ class Customer
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role == 3) {
+        if (auth()->user()->tokenCan('role:customer')) {
             return $next($request);
         }
 
-        if (! $request->expectsJson()) {
-            return route('login');
-        }
         return response()->json('Not Authorized', 401);
     }
 }

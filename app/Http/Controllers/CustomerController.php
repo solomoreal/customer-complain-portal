@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use App\Models\Branch;
 use App\Notifications\CustomerCreated;
-use Image;
 
 class CustomerController extends Controller
 {
@@ -16,7 +15,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $customers = Customer::latest()->paginate(10);
         if($request->ajax()){
@@ -24,26 +23,19 @@ class CustomerController extends Controller
             return $this->sendResponse($success, 'Managers retrieved');
         }
 
-        return view('customer.index',compact('customers'));
+        return view('customers.index',compact('customers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(Request $request)
     {
         $branches = Branch::all();
-        return view('customer.create',compact('branches'));
+        if($request->ajax()){
+            $data['branches'] = $branches;
+            return $this->sendResponse($data,'associate customer with branch');
+        }
+        //return view('customers.create',compact('branches'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -58,14 +50,7 @@ class CustomerController extends Controller
             'state' => 'required',
             'photo' => 'required|image',
         ]);
-       if($request->hasFile('photo')){
-        $original = $request->file('photo');
-        $image = Image::make($original)->resize(100, 100);
-        $photo_url = time().'.'.$original->extension();
-        //upload image
-        $path = $image->storeAs('public', $photo_url);
 
-       }
 
        $customer = Customer::create([
             'first_name' => $request->first_name,
@@ -77,8 +62,11 @@ class CustomerController extends Controller
             'address' => $request->address,
             'city' => $request->city,
             'state' => $request->state,
-            'photo' => $photo_url,
         ]);
+        if($request->hasFile('photo')){
+            $original = $request->file('photo');
+            $customer->addMedia($original)->toMediaCollection('photo');
+           }
         $customer->notify(new CustomerCreated($customer));
         if($request->ajax()){
 
@@ -88,47 +76,27 @@ class CustomerController extends Controller
         //return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Customer $customer)
+    public function show(Customer $customer, Request $request)
     {
-        if(Request::ajax()){
+        if($request->ajax()){
             $success['customer'] = $customer;
             return $this->sendResponse($success, 'customer');
         }
-
-        //return view('customer.show',compact('customer'));
+        //return view('customers.show',compact('customer'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Customer $customer)
+    public function edit(Customer $customer, Request $request)
     {
         $branches = Branch::all();
-        if(Request::ajax()){
+        if($request->ajax()){
             $data['branches'] = $branches;
             $data['customer'] = $customer;
 
             return $this->sendResponse($data,'use the data for customer update');
         }
-        //return view('customer.edit',compact('branches','customer'));
+        //return view('customers.edit',compact('branches','customer'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Customer $customer)
     {
         $request->validate([
@@ -141,16 +109,7 @@ class CustomerController extends Controller
             'city' => 'required',
             'state' => 'required',
         ]);
-       if($request->hasFile('photo')){
-        $original = $request->file('photo');
-        $image = Image::make($original)->resize(100, 100);
-        $photo_url = time().'.'.$original->extension();
-        //upload image
-        $path = $image->storeAs('public', $photo_url);
 
-       }else{
-           $photo_url = $customer->photo;
-       }
 
        $customer->update([
             'first_name' => $request->first_name,
@@ -164,7 +123,11 @@ class CustomerController extends Controller
             'state' => $request->state,
             'photo' => $photo_url,
         ]);
-        $customer->notify(new CustomerCreated($customer));
+        if($request->hasFile('photo')){
+            $original = $request->file('photo');
+            $customer->addMedia($original)->toMediaCollection('photo');
+           }
+
         if($request->ajax()){
 
             return $this->sendResponse($success, 'Customer Successfuly Created');
@@ -174,10 +137,10 @@ class CustomerController extends Controller
     }
 
 
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer, Request $request)
     {
         $customer->delete();
-        if(Request::ajax()){
+        if($request->ajax()){
             return $this->sendResponse([],'Customer successfully Deleted');
         }
         //return back();
