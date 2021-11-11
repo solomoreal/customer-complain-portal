@@ -20,7 +20,7 @@ class CustomerController extends BaseController
     public function index(Request $request)
     {
         $customers = Customer::latest()->paginate(10);
-        if($request->ajax()){
+        if($request->expectsJson()){
             $success['customers'] = $customers;
             return $this->sendResponse($success, 'Managers retrieved');
         }
@@ -31,7 +31,7 @@ class CustomerController extends BaseController
     public function create(Request $request)
     {
         $branches = Branch::all();
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branches'] = $branches;
             return $this->sendResponse($data,'associate customer with branch');
         }
@@ -57,17 +57,17 @@ class CustomerController extends BaseController
             $customer->addMedia($original)->toMediaCollection('photo');
            }
         $customer->notify(new CustomerCreated($customer));
-        //if($request->ajax()){
+        if($request->expectsJson()){
             $success['customer'] = $customer;
             return $this->sendResponse($success, 'Customer Successfuly Created');
-        //}
+        }
 
         //return back();
     }
 
     public function show(Customer $customer, Request $request)
     {
-        if($request->ajax()){
+        if($request->expectsJson()){
             $success['customer'] = $customer;
             return $this->sendResponse($success, 'customer');
         }
@@ -77,7 +77,7 @@ class CustomerController extends BaseController
     public function edit(Customer $customer, Request $request)
     {
         $branches = Branch::all();
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branches'] = $branches;
             $data['customer'] = $customer;
 
@@ -106,7 +106,7 @@ class CustomerController extends BaseController
             $customer->addMedia($original)->toMediaCollection('photo');
            }
 
-        if($request->ajax()){
+        if($request->expectsJson()){
 
             return $this->sendResponse($success, 'Customer Successfuly Created');
         }
@@ -118,7 +118,7 @@ class CustomerController extends BaseController
     public function destroy(Customer $customer, Request $request)
     {
         $customer->delete();
-        if($request->ajax()){
+        if($request->expectsJson()){
             return $this->sendResponse([],'Customer successfully Deleted');
         }
         //return back();

@@ -15,7 +15,7 @@ class BranchController extends BaseController
     {
         $branches = Branch::paginate(10);
 
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branches'] = Branch::all();
              return $this->sendResponse($data,'all branches');
         }
@@ -41,7 +41,7 @@ class BranchController extends BaseController
             'email' => $request->email,
         ]);
 
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branch'] = $branch;
             return $this->sendResponse($data,'Branch successfully created');
         }
@@ -51,7 +51,7 @@ class BranchController extends BaseController
 
     public function show(Branch $branch, Request $request)
     {
-       if($request->ajax()){
+       if($request->expectsJson()){
         $data['branch'] = $branch;
         return $this->sendResponse($data,'show Branch');
        }
@@ -62,7 +62,7 @@ class BranchController extends BaseController
 
     public function edit(Branch $branch, Request $request)
     {
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branch'] = $branch;
             return $this->sendResponse($data,'edit Branch');
            }
@@ -82,7 +82,7 @@ class BranchController extends BaseController
             'email' => $request->email,
         ]);
 
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branch'] = $branch;
             return $this->sendResponse($data,'Branch successfully updated');
         }
@@ -94,7 +94,7 @@ class BranchController extends BaseController
     public function destroy(Branch $branch, Request $request)
     {
         $branch->delete();
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branch'] = $branch;
             return $this->sendResponse($data,'Branch successfully deleted');
         }

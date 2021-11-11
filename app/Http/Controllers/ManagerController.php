@@ -19,7 +19,7 @@ class ManagerController extends BaseController
     {
         $managers = Manager::paginate(10);
 
-        if($request->ajax()){
+        if($request->expectsJson()){
             $success['managers'] = $manager;
             return $this->sendResponse($success, 'Managers retrieved');
         }
@@ -45,7 +45,7 @@ class ManagerController extends BaseController
             'branch_id' => $request->branch_id,
         ]);
 
-        if($request->ajax()){
+        if($request->expectsJson()){
             $success['token'] =  $token = $manager->createToken($manager->email,['role:manager'])->plainTextToken;
             return $this->sendResponse($success, 'Manager Successfuly Created');
         }
@@ -55,7 +55,7 @@ class ManagerController extends BaseController
 
     public function show(Manager $manager, Request $request)
     {
-        if($request->ajax()){
+        if($request->expectsJson()){
             $success['manager'] = $manager;
             return $this->sendResponse($success, 'Manager');
         }
@@ -80,7 +80,7 @@ class ManagerController extends BaseController
             'branch_id' => $request->branch_id,
         ]);
 
-        if($request->ajax()){
+        if($request->expectsJson()){
             $success['manager'] = $manager;
             return $this->sendResponse($success, 'Manager Successfuly updated');
         }
@@ -91,7 +91,7 @@ class ManagerController extends BaseController
     public function destroy(Manager $manager, Request $request)
     {
         $manager->delete();
-        if($request->ajax()){
+        if($request->expectsJson()){
             $success['manager'] = $manager;
             return $this->sendResponse($success, 'Manager Successfuly deleted');
         }

@@ -15,7 +15,7 @@ class ComplainController extends BaseController
     public function index(Request $request)
     {
         $complaints = Complain::paginate(10);
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['compliants'] = Complain::all();
              return $this->sendResponse($data,'all compliants');
         }
@@ -26,7 +26,7 @@ class ComplainController extends BaseController
     public function create(Request $request)
     {
         $branches = Branch::all();
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branches'] = $branches;
              return $this->sendResponse($data,'all branches');
         }
@@ -45,7 +45,7 @@ class ComplainController extends BaseController
         ]);
 
         if($complaint){
-            if($request->ajax()){
+            if($request->expectsJson()){
                 $data['compliant'] = $complaint;
                  return $this->sendResponse($data,'complaint successfully submitted, we will get back to you as soon as possible');
             }
@@ -56,7 +56,7 @@ class ComplainController extends BaseController
 
     public function show(Complain $complain, Request $request)
     {
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['complaint'] = $complain;
             return $this->sendResponse($data,'show Branch');
            }
@@ -68,7 +68,7 @@ class ComplainController extends BaseController
     public function edit(Complain $complain, Request $request)
     {
         $branches = Branch::all();
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['branches'] = $branches;
             $data['complaint'] = $complain;
             return $this->sendResponse($data,'update data');
@@ -89,7 +89,7 @@ class ComplainController extends BaseController
         ]);
 
         if($complain){
-            if($request->ajax()){
+            if($request->expectsJson()){
                 $data['compliant'] = $complain;
                  return $this->sendResponse($data,'complaint successfully submitted, we will get back to you as soon as possible');
             }
@@ -102,7 +102,7 @@ class ComplainController extends BaseController
     public function destroy(Complain $complain, Request $request)
     {
         $complain->delete();
-        if($request->ajax()){
+        if($request->expectsJson()){
             $data['complain'] = $complain;
             return $this->sendResponse($data,'complain successfully deleted');
         }
