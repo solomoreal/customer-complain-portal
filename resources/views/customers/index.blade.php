@@ -26,7 +26,7 @@
                         {{$id}}
                     </td>
                     <td class="text-center">
-                        <img src="{{$customer->photo }}" alt="empty" srcset="">
+                        <img src="{{$customer->getFirstMedia('photo') ? asset($customer->getFirstMedia('photo')->getFullUrl('thumb')) : $customer->photo }}" alt="empty" srcset="">
                     </td>
                     <td class="text-center">
                         {{$customer->fullName()}}

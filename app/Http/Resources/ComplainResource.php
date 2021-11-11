@@ -14,6 +14,13 @@ class ComplainResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'message' => $this->message,
+            'sent_by' => $this->customer->fullName(),
+            'branch' => $this->branch->branch_name,
+            'status' => $this->reviewed ? 'reviewed' : 'pending',
+        ];
     }
 }

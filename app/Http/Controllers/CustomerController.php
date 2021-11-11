@@ -6,6 +6,8 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\CustomerResource;
+use App\Http\Resources\BranchResource;
 use App\Http\Controllers\BaseController;
 use App\Models\Branch;
 use App\Notifications\CustomerCreated;
@@ -21,8 +23,8 @@ class CustomerController extends BaseController
     {
         $customers = Customer::latest()->paginate(10);
         if($request->expectsJson()){
-            $success['customers'] = $customers;
-            return $this->sendResponse($success, 'Managers retrieved');
+            $success['customers'] = CustomerResource::collection(Customer::latest()->get());
+            return $this->sendResponse($success, 'Customers retrieved');
         }
 
         return view('customers.index',compact('customers'));
@@ -32,7 +34,7 @@ class CustomerController extends BaseController
     {
         $branches = Branch::all();
         if($request->expectsJson()){
-            $data['branches'] = $branches;
+            $data['branches'] = BranchResource::collection($branches);
             return $this->sendResponse($data,'associate customer with branch');
         }
         //return view('customers.create',compact('branches'));
@@ -58,7 +60,7 @@ class CustomerController extends BaseController
            }
         $customer->notify(new CustomerCreated($customer));
         if($request->expectsJson()){
-            $success['customer'] = $customer;
+            $success['customer'] = new CustomerResource($customer);
             return $this->sendResponse($success, 'Customer Successfuly Created');
         }
 
@@ -68,7 +70,7 @@ class CustomerController extends BaseController
     public function show(Customer $customer, Request $request)
     {
         if($request->expectsJson()){
-            $success['customer'] = $customer;
+            $success['customer'] = new CustomerResource($customer);
             return $this->sendResponse($success, 'customer');
         }
         //return view('customers.show',compact('customer'));
@@ -78,8 +80,8 @@ class CustomerController extends BaseController
     {
         $branches = Branch::all();
         if($request->expectsJson()){
-            $data['branches'] = $branches;
-            $data['customer'] = $customer;
+            $data['branches'] = BranchResource::collection($branches);
+            $data['customer'] = new CustomerResource($customer);
 
             return $this->sendResponse($data,'use the data for customer update');
         }
@@ -108,7 +110,7 @@ class CustomerController extends BaseController
 
         if($request->expectsJson()){
 
-            return $this->sendResponse($success, 'Customer Successfuly Created');
+            return $this->sendResponse([], 'Customer Successfuly Updated');
         }
 
         //return back();

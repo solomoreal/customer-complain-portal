@@ -6,6 +6,8 @@ use App\Models\Complain;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateComplaintRequest;
 use App\Http\Requests\StoreComplaintRequest;
+use App\Http\Resources\ComplainResource;
+use App\Http\Resources\BranchResource;
 use App\Http\Controllers\BaseController;
 use App\Models\Branch;
 
@@ -16,7 +18,7 @@ class ComplainController extends BaseController
     {
         $complaints = Complain::paginate(10);
         if($request->expectsJson()){
-            $data['compliants'] = Complain::all();
+            $data['compliants'] = ComplainResource::collection(Complain::all());
              return $this->sendResponse($data,'all compliants');
         }
 
@@ -27,7 +29,7 @@ class ComplainController extends BaseController
     {
         $branches = Branch::all();
         if($request->expectsJson()){
-            $data['branches'] = $branches;
+            $data['branches'] =BranchResource::collection($branches);
              return $this->sendResponse($data,'all branches');
         }
 
@@ -46,7 +48,7 @@ class ComplainController extends BaseController
 
         if($complaint){
             if($request->expectsJson()){
-                $data['compliant'] = $complaint;
+                $data['compliant'] = new ComplainResource($complaint);
                  return $this->sendResponse($data,'complaint successfully submitted, we will get back to you as soon as possible');
             }
 
@@ -57,7 +59,7 @@ class ComplainController extends BaseController
     public function show(Complain $complain, Request $request)
     {
         if($request->expectsJson()){
-            $data['complaint'] = $complain;
+            $data['complaint'] = new ComplainResource($complain);
             return $this->sendResponse($data,'show Branch');
            }
 
@@ -69,8 +71,8 @@ class ComplainController extends BaseController
     {
         $branches = Branch::all();
         if($request->expectsJson()){
-            $data['branches'] = $branches;
-            $data['complaint'] = $complain;
+            $data['branches'] = BranchResource::collection($branches);
+            $data['complaint'] = new ComplainResource($complain);
             return $this->sendResponse($data,'update data');
         }
 
@@ -90,7 +92,7 @@ class ComplainController extends BaseController
 
         if($complain){
             if($request->expectsJson()){
-                $data['compliant'] = $complain;
+                $data['compliant'] = new ComplainResource($complain);
                  return $this->sendResponse($data,'complaint successfully submitted, we will get back to you as soon as possible');
             }
 
@@ -103,7 +105,7 @@ class ComplainController extends BaseController
     {
         $complain->delete();
         if($request->expectsJson()){
-            $data['complain'] = $complain;
+            $data['complain'] = new ComplainResource($complain);
             return $this->sendResponse($data,'complain successfully deleted');
         }
 

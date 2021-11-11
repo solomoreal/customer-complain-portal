@@ -7,7 +7,10 @@ use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateManagerRequest;
 use App\Http\Requests\StoreManagerRequest;
+use App\Http\Resources\ManagerResource;
+use App\Http\Resources\BranchResource;
 use App\Http\Controllers\BaseController;
+
 class ManagerController extends BaseController
 {
     /**
@@ -20,7 +23,7 @@ class ManagerController extends BaseController
         $managers = Manager::paginate(10);
 
         if($request->expectsJson()){
-            $success['managers'] = $manager;
+            $success['managers'] = ManagerResource::collection(Manager::all());
             return $this->sendResponse($success, 'Managers retrieved');
         }
 
@@ -50,13 +53,13 @@ class ManagerController extends BaseController
             return $this->sendResponse($success, 'Manager Successfuly Created');
         }
 
-        return view('managers.login');
+        //return view('managers.login');
     }
 
     public function show(Manager $manager, Request $request)
     {
         if($request->expectsJson()){
-            $success['manager'] = $manager;
+            $success['manager'] = new ManagerResource($manager);
             return $this->sendResponse($success, 'Manager');
         }
 
@@ -81,7 +84,7 @@ class ManagerController extends BaseController
         ]);
 
         if($request->expectsJson()){
-            $success['manager'] = $manager;
+            $success['manager'] = new ManagerResource($manager);
             return $this->sendResponse($success, 'Manager Successfuly updated');
         }
 
@@ -92,7 +95,7 @@ class ManagerController extends BaseController
     {
         $manager->delete();
         if($request->expectsJson()){
-            $success['manager'] = $manager;
+            $success['manager'] = new ManagerResource($manager);
             return $this->sendResponse($success, 'Manager Successfuly deleted');
         }
 

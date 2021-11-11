@@ -6,6 +6,7 @@ use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreBranchRequest;
 use App\Http\Requests\UpdateBranchRequest;
+use App\Http\Resources\BranchResource;
 use App\Http\Controllers\BaseController;
 
 class BranchController extends BaseController
@@ -16,19 +17,17 @@ class BranchController extends BaseController
         $branches = Branch::paginate(10);
 
         if($request->expectsJson()){
-            $data['branches'] = Branch::all();
+            $data['branches'] = BranchResource::collection(Branch::all());
              return $this->sendResponse($data,'all branches');
         }
 
         return view('branches.index',compact('branches'));
     }
 
-
     public function create()
     {
         //return view('branches.create');
     }
-
 
     public function store(StoreBranchRequest $request){
         $validated = $request->validated();
@@ -42,7 +41,7 @@ class BranchController extends BaseController
         ]);
 
         if($request->expectsJson()){
-            $data['branch'] = $branch;
+            $data['branch'] = new BranchResource($branch);
             return $this->sendResponse($data,'Branch successfully created');
         }
 
@@ -52,18 +51,17 @@ class BranchController extends BaseController
     public function show(Branch $branch, Request $request)
     {
        if($request->expectsJson()){
-        $data['branch'] = $branch;
+        $data['branch'] = new BranchResource($branch);
         return $this->sendResponse($data,'show Branch');
        }
 
        //return view('branches.show',compact('branch'));
     }
 
-
     public function edit(Branch $branch, Request $request)
     {
         if($request->expectsJson()){
-            $data['branch'] = $branch;
+            $data['branch'] = new BranchResource($branch);
             return $this->sendResponse($data,'edit Branch');
            }
 
@@ -83,23 +81,19 @@ class BranchController extends BaseController
         ]);
 
         if($request->expectsJson()){
-            $data['branch'] = $branch;
+            $data['branch'] = new BranchResource($branch);
             return $this->sendResponse($data,'Branch successfully updated');
         }
-
         //return back();
     }
-
 
     public function destroy(Branch $branch, Request $request)
     {
         $branch->delete();
         if($request->expectsJson()){
-            $data['branch'] = $branch;
+            $data['branch'] = new BranchResource($branch);
             return $this->sendResponse($data,'Branch successfully deleted');
         }
-
         //return back();
-
     }
 }

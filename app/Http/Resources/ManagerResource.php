@@ -14,6 +14,12 @@ class ManagerResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'name' => $this->fullName(),
+            'phone' => $this->phone,
+            'branch' => $this->branch->branch_name,
+            'id' => $this->id,
+
+        ];
     }
 }

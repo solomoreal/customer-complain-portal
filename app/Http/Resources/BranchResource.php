@@ -17,6 +17,10 @@ class BranchResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->branch_name,
+            'location' => $this->fullAddress(),
+            'manager' => $this->manager ? $this->manager->fullName() : 'vacant',
+            'total_customers' => count($this->customers),
+            'total_complaints' => count($this->complaints),
         ];
     }
 }
