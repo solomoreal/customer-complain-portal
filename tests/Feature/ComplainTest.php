@@ -15,7 +15,8 @@ class ComplainTest extends TestCase
      *
      * @return void
      */
-     public function test_can_create_new_complaint(){
-
+     public function test_complaint_index_returns_ok(){
+        $response = $this->get('/api/complaint');
+        $response->assertOk();
      }
 }

@@ -12,10 +12,11 @@ class ManagerTest extends TestCase
      *
      * @return void
      */
-    
 
-    public function test_manager_index_api_function(){
-  
-        
+
+    public function test_manager_index_function(){
+        //$response = $this->get('/api/manager');
+        //$response->assertOk();
+
     }
 }
