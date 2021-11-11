@@ -13,7 +13,7 @@ class StoreComplaintRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,9 +24,9 @@ class StoreComplaintRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string',
-            'message' => 'required',
-            'branch_id' => 'required|integer',
+            'title' => ['required', 'string'],
+            'message' => ['required'],
+            'branch_id' => ['required', 'integer'],
         ];
     }
 }

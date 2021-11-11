@@ -13,7 +13,7 @@ class StoreCustomerRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,16 +24,16 @@ class StoreCustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch_id' => 'required|integer',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'password' => 'required|confirmed',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'photo' => 'required|image',
+            'branch_id' => ['required', 'integer'],
+            'first_name' => ['required', 'string'],
+            'last_name' => ['required', 'string'],
+            'password' => ['required', 'confirmed'],
+            'email' => ['required', 'email'],
+            'phone' => ['required'],
+            'address' => ['required'],
+            'city' => ['required'],
+            'state' => ['required'],
+            'photo' => ['required', 'image'],
         ];
     }
 }
