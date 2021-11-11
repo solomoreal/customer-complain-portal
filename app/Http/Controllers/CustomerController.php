@@ -40,6 +40,7 @@ class CustomerController extends Controller
 
     public function store(StoreCustomerRequest $request)
     {
+       $validated = $request->validated();
        $customer = Customer::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -87,7 +88,7 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-
+       $validated = $request->validated();
        $customer->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,

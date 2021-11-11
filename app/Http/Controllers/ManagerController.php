@@ -35,6 +35,7 @@ class ManagerController extends BaseController
 
     public function store(StoreManagerRequest $request)
     {
+       $validated = $request->validated();
        $manager = Manager::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -70,6 +71,7 @@ class ManagerController extends BaseController
 
     public function update(UpdateManagerRequest $request, Manager $manager)
     {
+       $validated = $request->validated();
        $manager->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,

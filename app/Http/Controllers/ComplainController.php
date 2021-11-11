@@ -36,6 +36,7 @@ class ComplainController extends BaseController
 
     public function store(StoreComplaintRequest $request)
     {
+        $validated = $request->validated();
         $complaint = Complain::create([
             'title' => $request->title,
             'message' => $request->message,
@@ -79,7 +80,7 @@ class ComplainController extends BaseController
 
     public function update(UpdateComplaintRequest $request, Complain $complain)
     {
-        
+        $validated = $request->validated();
         $complain->update([
             'title' => $request->title,
             'message' => $request->message,

@@ -31,7 +31,7 @@ class BranchController extends BaseController
 
 
     public function store(StoreBranchRequest $request){
-
+        $validated = $request->validated();
         $branch = Branch::create([
             'branch_name' => $request->branch_name,
             'address' => $request->address,
@@ -72,6 +72,7 @@ class BranchController extends BaseController
 
     public function update(UpdateBranchRequest $request, Branch $branch)
     {
+        $validated = $request->validated();
         $branch->update([
             'branch_name' => $request->branch_name,
             'address' => $request->address,
