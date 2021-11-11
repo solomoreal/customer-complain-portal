@@ -10,7 +10,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\Branch;
 use App\Notifications\CustomerCreated;
 
-class CustomerController extends Controller
+class CustomerController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -57,10 +57,10 @@ class CustomerController extends Controller
             $customer->addMedia($original)->toMediaCollection('photo');
            }
         $customer->notify(new CustomerCreated($customer));
-        if($request->ajax()){
-
+        //if($request->ajax()){
+            $success['customer'] = $customer;
             return $this->sendResponse($success, 'Customer Successfuly Created');
-        }
+        //}
 
         //return back();
     }
