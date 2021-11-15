@@ -15,8 +15,9 @@ class ComplainTest extends TestCase
      *
      * @return void
      */
-     public function test_complaint_index_returns_ok(){
-        $response = $this->get('/api/complaint');
-        $response->assertOk();
+     public function test_only_logged_in_user_can_see_complain_view(){
+        $response = $this->get('/complaints');
+        $response->assertStatus(302);
+        $response->assertSee('login');
      }
 }

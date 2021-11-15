@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class Manager extends Model
 {
     use HasFactory, HasApiTokens, Notifiable, SoftDeletes;
@@ -21,4 +22,6 @@ class Manager extends Model
     public function fullName(){
         return $this->first_name.' '.$this->last_name;
     }
+
+    
 }
